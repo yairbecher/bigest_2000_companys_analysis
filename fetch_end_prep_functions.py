@@ -39,20 +39,6 @@ def companys_per_country(df: pd.DataFrame):
     return df_spsific_country
 
 
-# def calc_statistic_by_companys(df: pd.DataFrame, columns_for_calc: list):
-#     action_list = ['mean', 'median', 'mode', 'range', 'standard_deviation']
-#     data_dickt = defaultdict(list)
-#     for action in action_list:
-#         data_dickt['action'].append(action)
-#         data_dickt['sales'].append()
-#         data_dickt['profit'].append()
-#         data_dickt['assets'].append()
-#         data_dickt['sales'].append()
-#         data_dickt['market_value'].append()
-#
-#
-#     return df_statistic
-
 def calc_statistic_by_companys(df: pd.DataFrame, columns_for_calc: list):
     data_dickt = defaultdict(list)
     action_list = ['avg', 'median', 'str']
