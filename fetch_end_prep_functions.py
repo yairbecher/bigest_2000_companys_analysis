@@ -58,40 +58,31 @@ def calc_statistic_by_companys(df: pd.DataFrame, columns_for_calc: list):
     return df
 
 
-file_path = '/Users/yairbecher/Yair staf/Python_learning/2000_largest_companys_data/Top 2000 Companies Financial Data 2024.csv'
-df = pd.read_csv(file_path)
-df_prep = prep_df(df, columns_for_calc)
-df_statistic = calc_statistic_by_companys(df_prep, columns_for_calc)
-# df_spsific_country = companys_per_country(df)
-df_by_country = biuld_df_by_country(df)
-print(df.shape)
 
 
 
 
+def plot_function(df: pd.DataFrame):
+
+    country_counts = df['big_countrys'].value_counts()
+
+    # Step 3: Create the bar chart
+    plt.figure(figsize=(12, 6))
+    country_counts.plot(kind='bar', color='skyblue', edgecolor='black')
+
+    # Customize the chart
+    plt.title('Number of Companies by Country', fontsize=16)
+    plt.xlabel('Country', fontsize=12)
+    plt.ylabel('Number of Companies', fontsize=12)
+    plt.xticks(rotation=90, ha='right')  # Rotate x-axis labels for better readability
+    plt.tight_layout()
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+    # Show the chart
+    plt.show()
+    return print('hii')
 
 
-
-
-
-# Step 2: Count the number of companies per country
-country_counts = df['big_countrys'].value_counts()
-
-# Step 3: Create the bar chart
-plt.figure(figsize=(12, 6))
-country_counts.plot(kind='bar', color='skyblue', edgecolor='black')
-
-# Customize the chart
-plt.title('Number of Companies by Country', fontsize=16)
-plt.xlabel('Country', fontsize=12)
-plt.ylabel('Number of Companies', fontsize=12)
-plt.xticks(rotation=90, ha='right')  # Rotate x-axis labels for better readability
-plt.tight_layout()
-plt.grid(axis='y', linestyle='--', alpha=0.7)
-
-# Show the chart
-plt.show()
-print("hii")
 
 
 
