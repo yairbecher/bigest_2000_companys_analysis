@@ -20,4 +20,6 @@ bell_curve = bell_curve_for_statistic(df_statistic)
 df_by_country = biuld_df_by_country(df)
 print(df.shape)
 
+'CHECK FOR GITHUB'
+
 
