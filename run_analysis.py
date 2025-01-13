@@ -11,13 +11,14 @@ file_path = '/Users/yairbecher/Yair staf/Python_learning/2000_largest_companys_d
 df = pd.read_csv(file_path)
 
 
-columns_for_calc = ['Sales', 'Profit', 'Assets', 'Market Value']
+columns_for_calc = ['sales', 'profit', 'assets', 'market value']
 
 df_prep = prep_df(df, columns_for_calc)
-df_statistic = calc_statistic_by_companys(df_prep, columns_for_calc)
-bell_curve = bell_curve_for_statistic(df_statistic)
+# df_statistic = calc_statistic_by_companys(df_prep, columns_for_calc)
+# bell_curve = bell_curve_for_statistic(df_statistic)
 # df_spsific_country = companys_per_country(df)
-df_by_country = biuld_df_by_country(df)
+df_by_country = biuld_df_by_country(df_prep)
+df_statistic_by_country = calc_statistic_by_companys(df_by_country, columns_for_calc)
 print(df.shape)
 
 'CHECK FOR GITHUB'

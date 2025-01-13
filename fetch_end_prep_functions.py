@@ -7,6 +7,7 @@ from scipy.stats import norm
 
 
 def prep_df(df: pd.DataFrame, columns_for_calc: list):
+    df.columns = df.columns.str.lower()
     for column in columns_for_calc:
         df[column] = df[column].str.replace('$', '', regex=False)
         df[column] = df[column].str.replace(',', '', regex=False)
@@ -25,7 +26,7 @@ def calc_statistic_by_companys(df: pd.DataFrame, columns_for_calc: list):
     for column in columns_for_calc:
         avg = df[column].mean()
         median = df[column].median()
-        std =df[column].std()
+        std = df[column].std()
 
         data_dickt[column].append(avg / 1_000_000)
         data_dickt[column].append(median / 1_000_000)
@@ -35,9 +36,29 @@ def calc_statistic_by_companys(df: pd.DataFrame, columns_for_calc: list):
     return df
 
 
+def bell_curve_for_statistic(df: pd.DataFrame):
+    mean = float(df['sales'].iloc[0])
+    std_dev = float(df['sales'].iloc[2])
+    num_companys = 2000
+
+    x = np.linspace(mean - 3 * std_dev, mean + 3 * std_dev, num_companys)
+    y = norm.pdf(x, mean, std_dev)
+
+    # Plot the bell curve
+    plt.figure(figsize=(8, 5))
+    plt.plot(x, y, label='Normal Distribution', color='blue')
+    plt.title('Bell Curve')
+    plt.xlabel('Value')
+    plt.ylabel('Probability Density')
+    plt.axvline(mean, color='red', linestyle='--', label='Mean')
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+
 def companys_per_country(df: pd.DataFrame):
     contry = input('input cuontry for check: ')
-    df_spsific_country = df[df['Country'] == contry]
+    df_spsific_country = df[df['country'] == contry]
     return df_spsific_country
 
 
@@ -45,15 +66,15 @@ def companys_per_country(df: pd.DataFrame):
 
 def biuld_df_by_country(df: pd.DataFrame):
     data_dict = defaultdict(list)
-    country_list = df['Country'].unique()
+    country_list = df['country'].unique()
     for country in country_list:
-        df_small = df[df['Country'] == country]
+        df_small = df[df['country'] == country]
         data_dict['country'].append(country)
         data_dict['num_of_companys'].append(df_small.shape[0])
-        data_dict['sales'].append(round(sum(df_small['Sales']) / 1_000_000, 2))
-        data_dict['profit'].append(round(sum(df_small['Profit']) / 1_000_000, 2))
-        data_dict['assets'].append(round(sum(df_small['Assets']) / 1_000_000, 2))
-        data_dict['market_value'].append(round(sum(df_small['Market Value']) / 1_000_000, 2))
+        data_dict['sales'].append(round(sum(df_small['sales']) / 1_000_000, 2))
+        data_dict['profit'].append(round(sum(df_small['profit']) / 1_000_000, 2))
+        data_dict['assets'].append(round(sum(df_small['assets']) / 1_000_000, 2))
+        data_dict['market_value'].append(round(sum(df_small['market value']) / 1_000_000, 2))
 
     df = pd.DataFrame(data_dict)
     return df
@@ -89,27 +110,10 @@ def plot_function(df: pd.DataFrame):
 
 
 def merge_small_cuntry(df: pd.DataFrame):
-    country_counts = df['Country'].value_counts()
-    df['big_countrys'] = df['Country'].apply(lambda x: x if country_counts[x] >= 10 else 'Other')
+    country_counts = df['country'].value_counts()
+    df['big_countrys'] = df['country'].apply(lambda x: x if country_counts[x] >= 10 else 'other')
     return df
 
 
-def bell_curve_for_statistic(df: pd.DataFrame):
-    mean = float(df['Sales'].iloc[0])
-    std_dev = float(df['Sales'].iloc[2])
-    num_companys = 2000
 
-    x = np.linspace(mean - 3 * std_dev, mean + 3 * std_dev, num_companys)
-    y = norm.pdf(x, mean, std_dev)
-
-    # Plot the bell curve
-    plt.figure(figsize=(8, 5))
-    plt.plot(x, y, label='Normal Distribution', color='blue')
-    plt.title('Bell Curve')
-    plt.xlabel('Value')
-    plt.ylabel('Probability Density')
-    plt.axvline(mean, color='red', linestyle='--', label='Mean')
-    plt.legend()
-    plt.grid()
-    plt.show()
 
