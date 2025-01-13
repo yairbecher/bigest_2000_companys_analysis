@@ -7,7 +7,6 @@ from fetch_end_prep_functions import prep_df, calc_statistic_by_companys, biuld_
 
 
 
-
 file_path = '/Users/yairbecher/Yair staf/Python_learning/2000_largest_companys_data/Top 2000 Companies Financial Data 2024.csv'
 df = pd.read_csv(file_path)
 
