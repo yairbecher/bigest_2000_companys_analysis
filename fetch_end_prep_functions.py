@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import seaborn as sns
 import statistics as st
 import matplotlib.pyplot as plt
 from collections import defaultdict
@@ -8,6 +9,7 @@ from scipy.stats import norm
 
 def prep_df(df: pd.DataFrame, columns_for_calc: list):
     df.columns = df.columns.str.lower()
+    df.rename(columns={'market value': 'market_value'}, inplace=True)
     for column in columns_for_calc:
         df[column] = df[column].str.replace('$', '', regex=False)
         df[column] = df[column].str.replace(',', '', regex=False)
@@ -74,7 +76,7 @@ def biuld_df_by_country(df: pd.DataFrame):
         data_dict['sales'].append(round(sum(df_small['sales']) / 1_000_000, 2))
         data_dict['profit'].append(round(sum(df_small['profit']) / 1_000_000, 2))
         data_dict['assets'].append(round(sum(df_small['assets']) / 1_000_000, 2))
-        data_dict['market_value'].append(round(sum(df_small['market value']) / 1_000_000, 2))
+        data_dict['market_value'].append(round(sum(df_small['market_value']) / 1_000_000, 2))
 
     df = pd.DataFrame(data_dict)
     return df
@@ -116,4 +118,26 @@ def merge_small_cuntry(df: pd.DataFrame):
 
 
 
+def distribution_by_country(df: pd.DataFrame):
 
+    plt.figure(figsize=(30, 6))
+
+    sns.kdeplot(df['num_of_companys'], fill=True, color='blue', alpha=0.5)
+    plt.xticks(range(1, max(df['num_of_companys']), 10))
+    # plt.xticks(df['num_of_companys'], df['country'], rotation=90, fontsize=10)
+
+    # Add country names as annotations
+    # for i, row in df.iterrows():
+    #     plt.text(row['num_of_companys'], 0.005, row['country'], rotation=90, ha='center', fontsize=10)
+
+    plt.title('Density of Companies Across Countries')
+    plt.xlabel('Number of Companies')
+    plt.ylabel('Density')
+    plt.show()
+
+
+    # country_counts.sort_values(ascending=False).plot(kind='bar', figsize=(12, 6), color='skyblue')
+    # plt.title('Number of Companies by Country')
+    # plt.xlabel('Country')
+    # plt.ylabel('Number of Companies')
+    # plt.show()
