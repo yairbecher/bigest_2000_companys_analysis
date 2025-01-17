@@ -11,16 +11,12 @@ def prep_df(df: pd.DataFrame, columns_for_calc: list):
     df.columns = df.columns.str.lower()
     df.rename(columns={'market value': 'market_value'}, inplace=True)
     for column in columns_for_calc:
-        df[column] = df[column].str.replace('$', '', regex=False)
-        df[column] = df[column].str.replace(',', '', regex=False)
-        df[column] = df[column].apply(lambda x: float(x[:-1]) * 1_000_000_000 if x.endswith('b') else float(x[:-1]) * 1_000_000)
-        df[column] = df[column].astype(int)
-        # df[column] = pd.to_numeric(df[column], errors='coerce')
+        df[column] = df[column].replace({'\$': '', ',': '', ' B': 'e9', ' M': 'e6'}, regex=True).astype(float).astype(int)
     return df
 
 
 
-def calc_statistic_by_companys(df: pd.DataFrame, columns_for_calc: list):
+def calc_df_statistic(df: pd.DataFrame, columns_for_calc: list):
     data_dickt = defaultdict(list)
     action_list = ['avg', 'median', 'str']
     for action in action_list:
@@ -30,9 +26,9 @@ def calc_statistic_by_companys(df: pd.DataFrame, columns_for_calc: list):
         median = df[column].median()
         std = df[column].std()
 
-        data_dickt[column].append(avg / 1_000_000)
-        data_dickt[column].append(median / 1_000_000)
-        data_dickt[column].append(std / 1_000_000)
+        data_dickt[column].append(avg)
+        data_dickt[column].append(median)
+        data_dickt[column].append(std)
 
     df = pd.DataFrame(data_dickt)
     return df
@@ -73,10 +69,10 @@ def biuld_df_by_country(df: pd.DataFrame):
         df_small = df[df['country'] == country]
         data_dict['country'].append(country)
         data_dict['num_of_companys'].append(df_small.shape[0])
-        data_dict['sales'].append(round(sum(df_small['sales']) / 1_000_000, 2))
-        data_dict['profit'].append(round(sum(df_small['profit']) / 1_000_000, 2))
-        data_dict['assets'].append(round(sum(df_small['assets']) / 1_000_000, 2))
-        data_dict['market_value'].append(round(sum(df_small['market_value']) / 1_000_000, 2))
+        data_dict['sales'].append(sum(df_small['sales']))
+        data_dict['profit'].append(sum(df_small['profit']))
+        data_dict['assets'].append(sum(df_small['assets']))
+        data_dict['market_value'].append(sum(df_small['market_value']))
 
     df = pd.DataFrame(data_dict)
     return df
@@ -141,3 +137,24 @@ def distribution_by_country(df: pd.DataFrame):
     # plt.xlabel('Country')
     # plt.ylabel('Number of Companies')
     # plt.show()
+
+
+def Trend_graph_by_country(df: pd.DataFrame):
+    df = df.drop(columns=["num_of_companys"])
+
+    df_long = df.melt(id_vars="country", var_name="Indicator", value_name="Value")
+
+    # Plot using Seaborn
+    plt.figure(figsize=(12, 6))
+    sns.lineplot(data=df_long, x="country", y="Value", hue="Indicator", marker="o")
+
+    # Add labels and title
+    plt.title("Economic Indicators by Country", fontsize=16)
+    plt.xlabel("country", fontsize=12)
+    plt.ylabel("Value", fontsize=12)
+    plt.xticks(rotation=90)
+    plt.legend(title="Indicator")
+    plt.grid(axis="y", linestyle="--", alpha=0.7)
+    plt.tight_layout()
+
+    plt.show()
