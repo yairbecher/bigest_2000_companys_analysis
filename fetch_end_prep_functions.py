@@ -158,3 +158,5 @@ def Trend_graph_by_country(df: pd.DataFrame):
     plt.tight_layout()
 
     plt.show()
+
+def chek_for_git()
