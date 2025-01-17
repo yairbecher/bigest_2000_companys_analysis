@@ -21,7 +21,7 @@ df_statistic_by_country = calc_df_statistic(df_by_country, columns_for_calc)
 
 print(df.shape)
 
-'CHECK FOR GITHUB'
+'CHECK FOR GITHUB 2'
 
 
 
