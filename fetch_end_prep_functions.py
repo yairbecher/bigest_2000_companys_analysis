@@ -122,21 +122,11 @@ def distribution_by_country(df: pd.DataFrame):
     plt.xticks(range(1, max(df['num_of_companys']), 10))
     # plt.xticks(df['num_of_companys'], df['country'], rotation=90, fontsize=10)
 
-    # Add country names as annotations
-    # for i, row in df.iterrows():
-    #     plt.text(row['num_of_companys'], 0.005, row['country'], rotation=90, ha='center', fontsize=10)
 
     plt.title('Density of Companies Across Countries')
     plt.xlabel('Number of Companies')
     plt.ylabel('Density')
     plt.show()
-
-
-    # country_counts.sort_values(ascending=False).plot(kind='bar', figsize=(12, 6), color='skyblue')
-    # plt.title('Number of Companies by Country')
-    # plt.xlabel('Country')
-    # plt.ylabel('Number of Companies')
-    # plt.show()
 
 
 def Trend_graph_by_country(df: pd.DataFrame):
@@ -158,5 +148,3 @@ def Trend_graph_by_country(df: pd.DataFrame):
     plt.tight_layout()
 
     plt.show()
-
-def chek_for_git()
