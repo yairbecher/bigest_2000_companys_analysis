@@ -12,6 +12,7 @@ def prep_df(df: pd.DataFrame, columns_for_calc: list):
     df.rename(columns={'market value': 'market_value'}, inplace=True)
     for column in columns_for_calc:
         df[column] = df[column].replace({'\$': '', ',': '', ' B': 'e9', ' M': 'e6'}, regex=True).astype(float).astype(int)
+    df["profit_percentage"] = (df["profit"] / df["sales"]) * 100
     return df
 
 
@@ -33,25 +34,6 @@ def calc_df_statistic(df: pd.DataFrame, columns_for_calc: list):
     df = pd.DataFrame(data_dickt)
     return df
 
-
-def bell_curve_for_statistic(df: pd.DataFrame):
-    mean = float(df['sales'].iloc[0])
-    std_dev = float(df['sales'].iloc[2])
-    num_companys = 2000
-
-    x = np.linspace(mean - 3 * std_dev, mean + 3 * std_dev, num_companys)
-    y = norm.pdf(x, mean, std_dev)
-
-    # Plot the bell curve
-    plt.figure(figsize=(8, 5))
-    plt.plot(x, y, label='Normal Distribution', color='blue')
-    plt.title('Bell Curve')
-    plt.xlabel('Value')
-    plt.ylabel('Probability Density')
-    plt.axvline(mean, color='red', linestyle='--', label='Mean')
-    plt.legend()
-    plt.grid()
-    plt.show()
 
 
 def companys_per_country(df: pd.DataFrame):
@@ -79,9 +61,32 @@ def biuld_df_by_country(df: pd.DataFrame):
 
 
 
+def merge_small_cuntry(df: pd.DataFrame):
+    country_counts = df['country'].value_counts()
+    df['big_countrys'] = df['country'].apply(lambda x: x if country_counts[x] >= 10 else 'other')
+    return df
+
+def bell_curve_for_statistic(df: pd.DataFrame):
+    mean = float(df['sales'].iloc[0])
+    std_dev = float(df['sales'].iloc[2])
+    num_companys = 2000
+
+    x = np.linspace(mean - 3 * std_dev, mean + 3 * std_dev, num_companys)
+    y = norm.pdf(x, mean, std_dev)
+
+    # Plot the bell curve
+    plt.figure(figsize=(8, 5))
+    plt.plot(x, y, label='Normal Distribution', color='blue')
+    plt.title('Bell Curve')
+    plt.xlabel('Value')
+    plt.ylabel('Probability Density')
+    plt.axvline(mean, color='red', linestyle='--', label='Mean')
+    plt.legend()
+    plt.grid()
+    plt.show()
 
 
-
+    # # # graphs # # #
 
 def plot_function(df: pd.DataFrame):
 
@@ -101,16 +106,7 @@ def plot_function(df: pd.DataFrame):
 
     # Show the chart
     plt.show()
-    return print('hii')
 
-
-
-
-
-def merge_small_cuntry(df: pd.DataFrame):
-    country_counts = df['country'].value_counts()
-    df['big_countrys'] = df['country'].apply(lambda x: x if country_counts[x] >= 10 else 'other')
-    return df
 
 
 
@@ -129,7 +125,9 @@ def distribution_by_country(df: pd.DataFrame):
     plt.show()
 
 
-def Trend_graph_by_country(df: pd.DataFrame):
+def Trend_graph_by_country(df: pd.DataFrame, columns_for_calc: list):
+    for column in columns_for_calc:
+        df[column] = df[column] / df['num_of_companys']
     df = df.drop(columns=["num_of_companys"])
 
     df_long = df.melt(id_vars="country", var_name="Indicator", value_name="Value")
@@ -139,7 +137,7 @@ def Trend_graph_by_country(df: pd.DataFrame):
     sns.lineplot(data=df_long, x="country", y="Value", hue="Indicator", marker="o")
 
     # Add labels and title
-    plt.title("Economic Indicators by Country", fontsize=16)
+    plt.title("Economic Indicators by Country \n normalized by company average", fontsize=16)
     plt.xlabel("country", fontsize=12)
     plt.ylabel("Value", fontsize=12)
     plt.xticks(rotation=90)
@@ -147,4 +145,16 @@ def Trend_graph_by_country(df: pd.DataFrame):
     plt.grid(axis="y", linestyle="--", alpha=0.7)
     plt.tight_layout()
 
+    plt.show()
+
+
+def profit_percentage_graph(df: pd.DataFrame):
+    df.sort_values(by="profit_percentage", ascending=False, inplace=True)
+
+    plt.figure(figsize=(12, 6))
+    plt.plot(df["country"], df["profit_percentage"], marker="o")
+    plt.xticks(rotation=90)
+    plt.title("Profit Percentage")
+    plt.ylabel("Profit Percentage (%)")
+    plt.xlabel("countrys")
     plt.show()
