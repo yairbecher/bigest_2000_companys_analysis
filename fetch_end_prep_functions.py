@@ -10,9 +10,10 @@ from scipy.stats import norm
 def prep_df(df: pd.DataFrame, columns_for_calc: list):
     df.columns = df.columns.str.lower()
     df.rename(columns={'market value': 'market_value'}, inplace=True)
+    columns_for_calc.remove('profit_percentage')
     for column in columns_for_calc:
         df[column] = df[column].replace({'\$': '', ',': '', ' B': 'e9', ' M': 'e6'}, regex=True).astype(float).astype(int)
-    df["profit_percentage"] = (df["profit"] / df["sales"]) * 100
+    df["avg_profit_percentage"] = (df["profit"] / df["sales"])
     return df
 
 
@@ -53,6 +54,7 @@ def biuld_df_by_country(df: pd.DataFrame):
         data_dict['num_of_companys'].append(df_small.shape[0])
         data_dict['sales'].append(sum(df_small['sales']))
         data_dict['profit'].append(sum(df_small['profit']))
+        data_dict['avg_profit_percentage'].append(df_small['avg_profit_percentage'].mean())
         data_dict['assets'].append(sum(df_small['assets']))
         data_dict['market_value'].append(sum(df_small['market_value']))
 
@@ -148,13 +150,32 @@ def Trend_graph_by_country(df: pd.DataFrame, columns_for_calc: list):
     plt.show()
 
 
+# def profit_percentage_graph(df: pd.DataFrame):
+#     df.sort_values(by="avg_profit_percentage", ascending=False, inplace=True)
+#
+#     plt.figure(figsize=(12, 6))
+#     plt.plot(df["country"], df["avg_profit_percentage"], marker="o")
+#     plt.xticks(rotation=90)
+#     plt.title("AVG Profit Percentage")
+#     plt.ylabel("Profit Percentage (%)")
+#     plt.xlabel("countrys")
+#     plt.show()
+
+
 def profit_percentage_graph(df: pd.DataFrame):
-    df.sort_values(by="profit_percentage", ascending=False, inplace=True)
+    df.sort_values(by="avg_profit_percentage", ascending=False, inplace=True)
+
+    df["normalized_profit"] = df["avg_profit_percentage"] / df["num_of_companys"]
+
+    plt.plot(df["country"], df["avg_profit_percentage"], marker="o", label="Avg Profit %")
+    plt.plot(df["country"], df["normalized_profit"], marker="s", linestyle="--", color="red", label="Normalized Profit %")
+    plt.plot(df["country"], df["num_of_companys"], marker="o", color="green", label="num of companys")
 
     plt.figure(figsize=(12, 6))
-    plt.plot(df["country"], df["profit_percentage"], marker="o")
     plt.xticks(rotation=90)
-    plt.title("Profit Percentage")
-    plt.ylabel("Profit Percentage (%)")
-    plt.xlabel("countrys")
+    plt.title("AVG Profit Percentage and Normalized Profit Percentage")
+    plt.ylabel("Profit Percentage")
+    plt.xlabel("Countries")
+    plt.legend()
+    plt.grid(True)
     plt.show()
