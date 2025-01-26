@@ -1,97 +1,73 @@
-# bigest_2000_companys_analysis
+# Analysis of the World's 2000 Largest Companies
 
-Data Source
+## Data Source
+The dataset used in this research was obtained from Kaggle and contains information about the 2000 largest companies in the world for 2023. You can access the dataset [here](https://www.kaggle.com/code/devraai/financial-insights-of-top-2000-companies-2024/input).
 
-The dataset used in this research was obtained from Kaggle and contains information about the 2000 largest companies in the world for 2023. You can access the dataset here.
-
-Data Preparation
-
+## Data Preparation
 The following preprocessing steps were performed to clean and standardize the data:
+- Removed currency symbols ("$").
+- Converted financial values by replacing suffixes:
+  - "M" (millions) was replaced with multiplication by `1e6`.
+  - "B" (billions) was replaced with multiplication by `1e9`.
+- Transformed financial data from string to integer format for further analysis.
 
-Removed currency symbols ("$").
-
-Converted financial values by replacing suffixes:
-
-"M" (millions) was replaced with multiplication by 1e6.
-
-"B" (billions) was replaced with multiplication by 1e9.
-
-Transformed financial data from string to integer format for further analysis.
-
-Created DataFrames
-
+## Created DataFrames
 Several DataFrames were generated to facilitate analysis:
+1. **Statistical Summary DataFrame:**
+   - Calculates the mean, median, and standard deviation for key financial metrics across all companies.
 
-Statistical Summary DataFrame:
+2. **Country-Specific DataFrame:**
+   - Filters and displays financial data for companies based in a selected country.
 
-Calculates the mean, median, and standard deviation for key financial metrics across all companies.
+3. **Aggregated Country DataFrame:**
+   - Groups companies by country and aggregates key financial indicators.
 
-Country-Specific DataFrame:
+4. **Country-Level Statistics DataFrame:**
+   - Computes the mean, median, and standard deviation for financial metrics on a per-country basis.
 
-Filters and displays financial data for companies based in a selected country.
-
-Aggregated Country DataFrame:
-
-Groups companies by country and aggregates key financial indicators.
-
-Country-Level Statistics DataFrame:
-
-Computes the mean, median, and standard deviation for financial metrics on a per-country basis.
-
-Visualizations
-
+## Visualizations
 Several visualizations were created to better understand the data and identify trends:
+1. **Distribution of Companies by Country:**
+   - A visualization showing the number of companies per country.
 
-Distribution of Companies by Country:
+2. **Profit Percentage per Country:**
+   - Displays the profit ratio for each country, normalized by the number of companies.
 
-A visualization showing the number of companies per country.
+3. **Investment Profitability Index by Country:**
+   - A mathematical formula applied to create an index predicting investment profitability across different countries.
 
-Profit Percentage per Country:
-
-Displays the profit ratio for each country, normalized by the number of companies.
-
-Investment Profitability Index by Country:
-
-A mathematical formula applied to create an index predicting investment profitability across different countries.
-
-Future Research Directions
-
+## Future Research Directions
 Several additional analyses and enhancements are planned to expand the research:
 
-Exploring Further Visualizations:
+- **Exploring Further Visualizations:**
+  - Identify and generate meaningful charts from the existing dataset.
 
-Identify and generate meaningful charts from the existing dataset.
+- **Research Expansion:**
+  - Consider new research directions to deepen insights.
 
-Research Expansion:
+- **Demographics and Education Data Integration:**
+  - Incorporate country population sizes and analyze the working-age population.
+  - Add data on the number of academic degrees per country.
 
-Consider new research directions to deepen insights.
+- **Company-Level Analysis:**
+  - Compare company profit relative to their total assets.
 
-Demographics and Education Data Integration:
+- **Regression Analysis:**
+  - Use multiple linear regression to identify which variable (sales, profit, or assets) best predicts market value.
 
-Incorporate country population sizes and analyze the working-age population.
+- **Macroeconomic Indicators:**
+  - Integrate GDP per capita data for a more comprehensive analysis.
 
-Add data on the number of academic degrees per country.
+- **Geographical Data Representation:**
+  - Develop an interactive world map using Tableau to illustrate the distribution of assets and companies across countries.
 
-Company-Level Analysis:
+- **Market Value Prediction Model:**
+  - Build a predictive model to estimate market value based on profit, assets, and sales.
 
-Compare company profit relative to their total assets.
+- **Outlier Detection:**
+  - Identify companies with unusual profits (both high and low) by predicting profit based on other variables and analyzing deviations.
 
-Regression Analysis:
+---
 
-Use multiple linear regression to identify which variable (sales, profit, or assets) best predicts market value.
+This project aims to provide valuable insights into the global corporate landscape and guide potential investment strategies based on financial performance metrics.
 
-Macroeconomic Indicators:
-
-Integrate GDP per capita data for a more comprehensive analysis.
-
-Geographical Data Representation:
-
-Develop an interactive world map using Tableau to illustrate the distribution of assets and companies across countries.
-
-Market Value Prediction Model:
-
-Build a predictive model to estimate market value based on profit, assets, and sales.
-
-Outlier Detection:
-
-Identify companies with unusual profits (both high and low) by predicting profit based on other variables and analyzing deviations.
