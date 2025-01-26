@@ -16,7 +16,7 @@ df_prep = prep_df(df, columns_for_calc)
 df_statistic_by_company = calc_df_statistic(df_prep, columns_for_calc)
 df_by_country = biuld_df_by_country(df_prep)
 df_statistic_by_country = calc_df_statistic(df_by_country, columns_for_calc)
-# df_spsific_country = feth_spsific_country(df)
+df_spsific_country = feth_spsific_country(df)
 
 
 plots = run_plots_analyss(df_by_country, columns_for_calc, df_statistic_by_company)

@@ -52,6 +52,7 @@ def biuld_df_by_country(df: pd.DataFrame):
         data_dict['sales'].append(sum(df_small['sales']))
         data_dict['profit'].append(sum(df_small['profit']))
         data_dict['avg_profit_percentage'].append(df_small['avg_profit_percentage'].mean())
+        data_dict['median_profit'].append(df_small['profit'].median())
         data_dict['assets'].append(sum(df_small['assets']))
         data_dict['market_value'].append(sum(df_small['market_value']))
 

@@ -12,6 +12,7 @@ def run_plots_analyss(df_by_country: pd.DataFrame, columns_for_calc: list, df_st
     profit_percentage_graph(df_by_country)
     distribution_by_country(df_by_country)
     investment_feasibility_index(df_by_country)
+    mead_investment_feasibility_index(df_by_country)
 
 
 def profit_percentage_graph(df: pd.DataFrame):
@@ -73,4 +74,19 @@ def investment_feasibility_index(df):
         bbox=dict(facecolor='white', alpha=0.5, edgecolor='black')
     )
 
+    plt.show()
+
+
+def mead_investment_feasibility_index(df):
+    df['company_weight'] = np.log(df['num_of_companys'])
+
+    df['IPI'] = df['median_profit'] * (df['profit'] / df['num_of_companys']) * df['company_weight']
+    df = df.sort_values(by='IPI', ascending=False)
+
+    plt.figure(figsize=(12, 10))
+    sns.barplot(x='country', y='IPI', data=df, palette='viridis')
+    plt.title('Investment Profitability Index by Country')
+    plt.xlabel('country')
+    plt.ylabel('Investment Profitability Index (IPI)')
+    plt.xticks(rotation=90)
     plt.show()
