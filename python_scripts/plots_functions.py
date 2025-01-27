@@ -5,15 +5,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-def run_plots_analyss(df_by_country: pd.DataFrame, columns_for_calc: list, df_statistic_by_company: pd.DataFrame):
-    profit_percentage_graph(df_by_country)
-    distribution_by_country(df_by_country)
-    investment_feasibility_index(df_by_country)
-    mead_investment_feasibility_index(df_by_country)
-
-    import os
-    import matplotlib.pyplot as plt
-
 def run_plots_analysis(df_by_country: pd.DataFrame, columns_for_calc: list, df_statistic_by_company: pd.DataFrame, output_dir="plots", save_figures=True):
 
     plot_functions = [
@@ -23,20 +14,20 @@ def run_plots_analysis(df_by_country: pd.DataFrame, columns_for_calc: list, df_s
         ("mead_investment_feasibility_index", mead_investment_feasibility_index)
     ]
 
+    output_dir = os.environ.get('output_dir', output_dir)
+
     for plot_name, plot_function in plot_functions:
         plt.figure()
         plot_function(df_by_country)
-        plt.show()
+        plt.tight_layout()
+        plt.draw()
 
         if save_figures:
-            os.environ.get('file_path')
-            file_path = os.environ.get('output_dir', f"{plot_name}.png")
+            file_path = os.path.join(output_dir, f"{plot_name}.png")
             plt.savefig(file_path, bbox_inches="tight")
             print(f"Saved: {file_path}")
-            plt.show()
-        else:
-            plt.show()
 
+        plt.show()  # Show the plot regardless of saving
         plt.close()
 
 
@@ -57,7 +48,6 @@ def profit_percentage_graph(df: pd.DataFrame):
     plt.xlabel("Countries")
     plt.legend()
     plt.grid(True)
-    plt.show()
 
 
 def distribution_by_country(df: pd.DataFrame):
@@ -72,7 +62,6 @@ def distribution_by_country(df: pd.DataFrame):
     plt.title('Density of Companies Across Countries')
     plt.xlabel('Number of Companies')
     plt.ylabel('Density')
-    plt.show()
 
 def investment_feasibility_index(df):
     df['company_weight'] = np.log(df['num_of_companys'])
@@ -99,8 +88,6 @@ def investment_feasibility_index(df):
         bbox=dict(facecolor='white', alpha=0.5, edgecolor='black')
     )
 
-    plt.show()
-
 
 def mead_investment_feasibility_index(df):
     df['company_weight'] = np.log(df['num_of_companys'])
@@ -124,5 +111,3 @@ def mead_investment_feasibility_index(df):
         fontsize=12, verticalalignment='top', horizontalalignment='right',
         bbox=dict(boxstyle="round,pad=0.3", edgecolor="black", facecolor="white")
     )
-
-    plt.show()

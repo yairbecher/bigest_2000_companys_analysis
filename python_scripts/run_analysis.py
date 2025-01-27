@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 from dfs_functions import prep_df, calc_df_statistic, biuld_df_by_country, feth_spsific_country
-from plots_functions import run_plots_analyss, run_plots_analysis
+from plots_functions import run_plots_analysis
 
 
 file_path = os.environ.get('file_path')
