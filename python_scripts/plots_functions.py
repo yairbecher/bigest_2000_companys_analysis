@@ -1,11 +1,8 @@
 import pandas as pd
 import numpy as np
+import os
 import seaborn as sns
-import statistics as st
 import matplotlib.pyplot as plt
-from collections import defaultdict
-from scipy.stats import norm
-from sklearn.preprocessing import MinMaxScaler
 
 
 def run_plots_analyss(df_by_country: pd.DataFrame, columns_for_calc: list, df_statistic_by_company: pd.DataFrame):
@@ -13,6 +10,34 @@ def run_plots_analyss(df_by_country: pd.DataFrame, columns_for_calc: list, df_st
     distribution_by_country(df_by_country)
     investment_feasibility_index(df_by_country)
     mead_investment_feasibility_index(df_by_country)
+
+    import os
+    import matplotlib.pyplot as plt
+
+def run_plots_analysis(df_by_country: pd.DataFrame, columns_for_calc: list, df_statistic_by_company: pd.DataFrame, output_dir="plots", save_figures=True):
+
+    plot_functions = [
+        ("profit_percentage_graph", profit_percentage_graph),
+        ("distribution_by_country", distribution_by_country),
+        ("investment_feasibility_index", investment_feasibility_index),
+        ("mead_investment_feasibility_index", mead_investment_feasibility_index)
+    ]
+
+    for plot_name, plot_function in plot_functions:
+        plt.figure()
+        plot_function(df_by_country)
+        plt.show()
+
+        if save_figures:
+            os.environ.get('file_path')
+            file_path = os.environ.get('output_dir', f"{plot_name}.png")
+            plt.savefig(file_path, bbox_inches="tight")
+            print(f"Saved: {file_path}")
+            plt.show()
+        else:
+            plt.show()
+
+        plt.close()
 
 
 def profit_percentage_graph(df: pd.DataFrame):
@@ -55,7 +80,7 @@ def investment_feasibility_index(df):
     df = df.sort_values(by='IPI', ascending=False)
 
     plt.figure(figsize=(12, 10))
-    sns.barplot(x='country', y='IPI', data=df, palette='viridis')
+    sns.barplot(x='country', y='IPI', data=df, hue='country', palette='viridis', legend=False)
     plt.title('Investment Profitability Index by Country')
     plt.xlabel('country')
     plt.ylabel('Investment Profitability Index (IPI)')
@@ -84,9 +109,20 @@ def mead_investment_feasibility_index(df):
     df = df.sort_values(by='IPI', ascending=False)
 
     plt.figure(figsize=(12, 10))
-    sns.barplot(x='country', y='IPI', data=df, palette='viridis')
+    sns.barplot(x='country', y='IPI', data=df, hue='country', palette='viridis', legend=False)
     plt.title('Investment Profitability Index by Country')
     plt.xlabel('country')
     plt.ylabel('Investment Profitability Index (IPI)')
     plt.xticks(rotation=90)
+
+    formula_text = (
+        "IPI = median_profit_per_country * (AVG_profit_per_company) * log(num_of_companies)"
+    )
+
+    plt.text(
+        0.95, 0.95, formula_text, transform=plt.gca().transAxes,
+        fontsize=12, verticalalignment='top', horizontalalignment='right',
+        bbox=dict(boxstyle="round,pad=0.3", edgecolor="black", facecolor="white")
+    )
+
     plt.show()

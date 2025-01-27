@@ -1,10 +1,5 @@
 import pandas as pd
-import numpy as np
-import seaborn as sns
-import statistics as st
-import matplotlib.pyplot as plt
 from collections import defaultdict
-from scipy.stats import norm
 
 
 def prep_df(df: pd.DataFrame, columns_for_calc: list):
