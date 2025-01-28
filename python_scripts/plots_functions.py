@@ -5,7 +5,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-def run_plots_analysis(df_by_country: pd.DataFrame, columns_for_calc: list, df_statistic_by_company: pd.DataFrame, output_dir="plots", save_figures=True):
+def run_plots_analysis(df_by_country: pd.DataFrame, columns_for_calc: list, df_statistic_by_company: pd.DataFrame, save_figures=True):
 
     plot_functions = [
         ("profit_percentage_graph", profit_percentage_graph),
@@ -14,8 +14,6 @@ def run_plots_analysis(df_by_country: pd.DataFrame, columns_for_calc: list, df_s
         ("mead_investment_feasibility_index", mead_investment_feasibility_index)
     ]
 
-    output_dir = os.environ.get('output_dir', output_dir)
-
     for plot_name, plot_function in plot_functions:
         plt.figure()
         plot_function(df_by_country)
@@ -23,12 +21,17 @@ def run_plots_analysis(df_by_country: pd.DataFrame, columns_for_calc: list, df_s
         plt.draw()
 
         if save_figures:
-            file_path = os.path.join(output_dir, f"{plot_name}.png")
-            plt.savefig(file_path, bbox_inches="tight")
-            print(f"Saved: {file_path}")
+            save_plots(plot_name)
 
-        plt.show()  # Show the plot regardless of saving
+        plt.show()
         plt.close()
+
+
+def save_plots(plot_name: str):
+    output_dir = os.environ.get('output_dir')
+    output_dir = os.path.join(output_dir, f"{plot_name}.png")
+    plt.savefig(output_dir, bbox_inches="tight")
+    print(f"Saved: {output_dir}")
 
 
 def profit_percentage_graph(df: pd.DataFrame):
