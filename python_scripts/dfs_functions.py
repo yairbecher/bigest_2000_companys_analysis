@@ -1,9 +1,11 @@
 import pandas as pd
+import sqlite3
 from collections import defaultdict
 
 
 def prep_df(df: pd.DataFrame, columns_for_calc: list):
     df.columns = df.columns.str.lower()
+    df[['name', 'country']] = df[['name', 'country']].apply(lambda x: x.str.lower())
     df.rename(columns={'market value': 'market_value'}, inplace=True)
     for column in columns_for_calc:
         if column in df.columns:
@@ -55,11 +57,21 @@ def biuld_df_by_country(df: pd.DataFrame):
     return df
 
 
+def fetch_specific_country(df: pd.DataFrame):
+    country = input('Input country for check: ')
 
-def feth_spsific_country(df: pd.DataFrame):
-    contry = input('input cuontry for check: ')
-    df_spsific_country = df[df['country'] == contry]
-    return df_spsific_country
+    conn = sqlite3.connect("df.db")
+    df.to_sql("countries", conn, if_exists="replace", index=False)
+    query = "SELECT * FROM countries WHERE country = ?"
+    df_specific_country = pd.read_sql_query(query, conn, params=(country,))
+    conn.close()
+
+    return df_specific_country
+
+# def feth_spsific_country(df: pd.DataFrame):
+#     contry = input('input cuontry for check: ')
+#     df_spsific_country = df[df['country'] == contry]
+#     return df_spsific_country
 
 
 def merge_small_cuntry(df: pd.DataFrame):
