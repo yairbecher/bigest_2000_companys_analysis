@@ -57,21 +57,12 @@ def biuld_df_by_country(df: pd.DataFrame):
     return df
 
 
+
+
 def fetch_specific_country(df: pd.DataFrame):
-    country = input('Input country for check: ')
-
-    conn = sqlite3.connect("df.db")
-    df.to_sql("countries", conn, if_exists="replace", index=False)
-    query = "SELECT * FROM countries WHERE country = ?"
-    df_specific_country = pd.read_sql_query(query, conn, params=(country,))
-    conn.close()
-
-    return df_specific_country
-
-# def feth_spsific_country(df: pd.DataFrame):
-#     contry = input('input cuontry for check: ')
-#     df_spsific_country = df[df['country'] == contry]
-#     return df_spsific_country
+    contry = input('input cuontry for check: ')
+    df_spsific_country = df[df['country'] == contry]
+    return df_spsific_country
 
 
 def merge_small_cuntry(df: pd.DataFrame):
