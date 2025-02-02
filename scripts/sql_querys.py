@@ -12,7 +12,7 @@ df = prep_df(df, columns_for_calc)
 
 conn = sqlite3.connect("df.db")
 df.to_sql("countries", conn, if_exists="replace", index=False)
-print('test')
+print('test1')
 
 
 
