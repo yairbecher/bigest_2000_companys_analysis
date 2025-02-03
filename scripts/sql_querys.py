@@ -11,7 +11,7 @@ df = pd.read_csv(impot_file)
 df = prep_df(df, columns_for_calc)
 
 conn = sqlite3.connect("df.db")
-df.to_sql("countries", conn, if_exists="replace", index=False)
+df.to_sql("companys", conn, if_exists="replace", index=False)
 print('test1')
 
 
@@ -19,23 +19,22 @@ print('test1')
 
 def min_max_sales(conn):
     query = "SELECT min(sales), max(sales) FROM countries"
-    resolt = pd.read_sql_query(query, conn)
-    print(resolt)
-    return resolt
+    result = pd.read_sql_query(query, conn)
+    print(result)
+    return result
 
 min_max_sales = min_max_sales(conn)
 print('test')
-# def fetch_specific_country():
-#     country = input('Input country for check: ')
-#
-#     conn = sqlite3.connect("df.db")
-#     df.to_sql("countries", conn, if_exists="replace", index=False)
-#     query = "SELECT * FROM countries WHERE country = ?"
-#     df_specific_country = pd.read_sql_query(query, conn, params=(country,))
-#     conn.close()
-#
-#     return df_specific_country
-#
-#
-# df = fetch_specific_country()
-# print('test')
+
+# avg_profit_percentage
+
+def df_by_country(conn):
+    query = (f"""SELECT distinct country as country, count(country) as num_of_companys, sum(sales), sum(profit), sum(assets), sum(market_value), avg(avg_profit_percentage) as avg_profit_percentage
+             FROM countries
+             group by country
+             order by num_of_companys desc""")
+    result = pd.read_sql_query(query, conn)
+    print(result)
+    return result
+
+df_by_country = df_by_country(conn)
