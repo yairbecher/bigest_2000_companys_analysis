@@ -26,7 +26,6 @@ def min_max_sales(conn):
 min_max_sales = min_max_sales(conn)
 print('test')
 
-# avg_profit_percentage
 
 def df_by_country(conn):
     query = (f"""SELECT distinct country as country, count(country) as num_of_companys, sum(sales), sum(profit), sum(assets), sum(market_value), avg(avg_profit_percentage) as avg_profit_percentage
@@ -39,6 +38,7 @@ def df_by_country(conn):
 
 df_by_country = df_by_country(conn)
 
+
  ####Ranking of all the columns for each company and a scheme of the ranking so that the company with the highest ranking is the best###
 def best_company(conn):
     # query = f"""   SELECT name,
@@ -50,14 +50,15 @@ def best_company(conn):
     # FROM countries
     # group by name"""
 
-    query = """SELECT name, 
-        (RANK() OVER(ORDER BY sales ASC) +
-        RANK() OVER(ORDER BY profit ASC) +
-        RANK() OVER(ORDER BY assets ASC) +
-        RANK() OVER(ORDER BY market_value ASC) +
-        RANK() OVER(ORDER BY avg_profit_percentage ASC)) AS total_rank
+    query = """SELECT name, DENSE_RANK() OVER(ORDER BY total_rank ASC) as ranke
+    FROM (SELECT name, 
+        (DENSE_RANK() OVER(ORDER BY sales ASC) +
+        DENSE_RANK() OVER(ORDER BY profit ASC) +
+        DENSE_RANK() OVER(ORDER BY assets ASC) +
+        DENSE_RANK() OVER(ORDER BY market_value ASC) +
+        DENSE_RANK() OVER(ORDER BY avg_profit_percentage ASC)) AS total_rank
         FROM countries
-        order by total_rank;"""
+        order by total_rank);"""
     result = pd.read_sql_query(query, conn)
     print(result)
     return result
