@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 import sqlite3
 from collections import defaultdict
 
@@ -73,6 +74,8 @@ def merge_small_cuntry(df: pd.DataFrame):
 
 ### save function ###
 
-# def save_to_machine(list_of_dfs: list):
-#     for df in list_of_dfs:
-
+def save_to_machine(df_statistic_by_company: pd.DataFrame, df_by_country: pd.DataFrame, df_statistic_by_country:pd.DataFrame):
+    output_dir = os.environ.get('output_dir')
+    df_statistic_by_company.to_csv(os.path.join(output_dir, "df_statistic_by_company.csv"), index=False)
+    df_by_country.to_csv(os.path.join(output_dir, "df_by_country.csv"), index=False)
+    df_statistic_by_country.to_csv(os.path.join(output_dir, "df_statistic_by_country.csv"), index=False)
