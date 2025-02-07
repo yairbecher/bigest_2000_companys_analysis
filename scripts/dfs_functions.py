@@ -53,6 +53,7 @@ def biuld_df_by_country(df: pd.DataFrame):
         data_dict['median_profit'].append(df_small['profit'].median())
         data_dict['assets'].append(sum(df_small['assets']))
         data_dict['market_value'].append(sum(df_small['market_value']))
+        data_dict['company_names'].append(", ".join(df_small['name']))
 
     df = pd.DataFrame(data_dict)
     return df
