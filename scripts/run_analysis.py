@@ -6,8 +6,8 @@ from plots_functions import run_plots_analysis
 
 
 
-impot_file = os.environ.get('impot_file')
-df = pd.read_csv(impot_file)
+impot_file = os.environ.get('inpot_file')
+df = pd.read_csv(impot_file, index_col=0)
 
 
 columns_for_calc = ['sales', 'profit', 'avg_profit_percentage', 'assets', 'market_value']
