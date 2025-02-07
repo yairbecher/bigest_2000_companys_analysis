@@ -4,6 +4,9 @@ import sqlite3
 from collections import defaultdict
 
 
+ # # # prepinng # # #
+
+
 def prep_df(df: pd.DataFrame, columns_for_calc: list):
     df.columns = df.columns.str.lower()
     df[['name', 'country']] = df[['name', 'country']].apply(lambda x: x.str.lower())
@@ -59,12 +62,14 @@ def biuld_df_by_country(df: pd.DataFrame):
     return df
 
 
-
-
 def fetch_specific_country(df: pd.DataFrame):
-    contry = input('input cuontry for check: ')
-    df_spsific_country = df[df['country'] == contry]
-    return df_spsific_country
+    country = input("Input country for check: ").strip().lower()
+
+    while country not in df['country'].unique():
+        country = input("Country is not valid. Please input a valid country: ").strip().lower()
+
+    df_specific_country = df[df['country'] == country]
+    return df_specific_country
 
 
 def merge_small_cuntry(df: pd.DataFrame):
@@ -73,10 +78,11 @@ def merge_small_cuntry(df: pd.DataFrame):
     return df
 
 
-### save function ###
+ # # # save function # # #
 
-def save_to_machine(df_statistic_by_company: pd.DataFrame, df_by_country: pd.DataFrame, df_statistic_by_country:pd.DataFrame):
+def save_dfs(df_prep: pd.DataFrame, df_statistic_by_company: pd.DataFrame, df_by_country: pd.DataFrame, df_statistic_by_country:pd.DataFrame):
     output_dir = os.environ.get('output_dir')
+    df_prep.to_csv(os.path.join(output_dir, "df_prep.csv"), index=False)
     df_statistic_by_company.to_csv(os.path.join(output_dir, "df_statistic_by_company.csv"), index=False)
     df_by_country.to_csv(os.path.join(output_dir, "df_by_country.csv"), index=False)
     df_statistic_by_country.to_csv(os.path.join(output_dir, "df_statistic_by_country.csv"), index=False)
