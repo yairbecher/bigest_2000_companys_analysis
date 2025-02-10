@@ -131,3 +131,37 @@ def best_compais_market_value_percentage(conn):
     return result
 
 df_best_compais_market_value_percentage = best_compais_market_value_percentage(conn)
+
+
+
+query = '''SELECT
+    a.bedrooms,
+    COUNT(r.id) AS confirmed_reservations,
+    (COUNT(r.id) * 100.0) / SUM(COUNT(r.id)) OVER () AS confirmed_reservations_%
+FROM reservations r
+JOIN apartments a ON r.apartment_id = a.apartment_id
+WHERE a.city = 'New York'
+  AND r.reservation_status = 'confirmed'
+  AND r.check_in_date BETWEEN '2022-05-01' AND '2022-05-31'
+GROUP BY a.bedrooms
+ORDER BY a.bedrooms;'''
+
+
+query = '''WITH confirmed_counts AS (
+    SELECT 
+        a.bedrooms, 
+        COUNT(*) AS confirmed_reservations
+    FROM reservations r
+    JOIN apartments a ON r.apartment_id = a.apartment_id
+    WHERE a.city = 'New York' 
+      AND r.reservation_status = 'confirmed'
+      AND r.check_in_date BETWEEN '2022-05-01' AND '2022-05-31'
+    GROUP BY a.bedrooms
+)
+SELECT 
+    bedrooms, 
+    confirmed_reservations, 
+    (confirmed_reservations * 100.0) / (SELECT SUM(confirmed_reservations) FROM confirmed_counts) AS confirmed_reservations_%
+FROM confirmed_counts
+ORDER BY bedrooms;
+'''
